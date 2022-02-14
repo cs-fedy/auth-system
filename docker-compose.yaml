@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: mongo
+    container_name: db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASS}
+    ports:
+      - 27017:27017
+    volumes:
+      - db_data:/data/db
+
+  cache:
+    image: redis
+    container_name: cache
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - db_cache:/data
+
+  # app:
+  #   build: .
+  #   container_name: app
+  #   restart: always
+  #   volumes:
+  #     - .:/home/app/:ro
+  #     - /home/app/node_modules/
+  #   ports:
+  #     - 3000:3000
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - db
+  #     - cache
+volumes:
+  db_data:
+  db_cache:
