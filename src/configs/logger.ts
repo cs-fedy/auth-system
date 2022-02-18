@@ -1,12 +1,6 @@
 import winston from 'winston'
 import { config } from '@configs'
 
-const enumerateErrorFormat = winston.format((info) => {
-  if (info instanceof Error) {
-    Object.assign(info, { message: info.stack })
-  }
-  return info
-})
 
 class Logger {
   private logger: winston.Logger
@@ -16,7 +10,6 @@ class Logger {
     this.logger = winston.createLogger({
       level: config.env === 'development' ? 'debug' : 'info',
       format: winston.format.combine(
-        enumerateErrorFormat(),
         config.env === 'development'
           ? winston.format.colorize()
           : winston.format.uncolorize(),

@@ -2,7 +2,7 @@
   "restartable": "rs",
   "ignore": [".git", "node_modules/", "dist/"],
   "watch": ["src"],
-  "ext": "js,json,ts",
+  "ext": "js,json,ts,yml",
   "execMap": {
     "ts": "ts-node -r tsconfig-paths/register"
   }

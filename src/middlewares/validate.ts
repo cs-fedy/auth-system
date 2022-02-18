@@ -1,8 +1,7 @@
 import express from 'express'
 import _ from 'lodash'
 import Joi from 'joi'
-import { ApiError } from '@utils'
-import { HttpStatus, HttpMessages } from '@custom-types'
+import { errorTypes } from '@custom-types'
 
 export default (schema: any) =>
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -15,15 +14,13 @@ export default (schema: any) =>
     if (error) {
       const errorPayload = error.details.reduce(
         (prev, { message, path }) => ({
-          ...ProgressEvent,
+          ...prev,
           [path[1]]: message.split('"').join('').trim(),
         }),
         {}
       )
 
-      return next(
-        new ApiError(HttpStatus.BAD_REQUEST, HttpMessages.H400, errorPayload)
-      )
+      return next(new errorTypes.BadRequestError(errorPayload))
     }
     Object.assign(req.body, value)
     return next()

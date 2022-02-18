@@ -1,12 +1,12 @@
 import express from 'express'
-import { AuthServices } from '@services'
+import { AuthServices, UserServices } from '@services'
 import { HttpStatus } from '@custom-types'
 import { tokens } from '@configs'
 import { cookiesOptions } from '@utils'
 
 export default class AuthControllers {
   static async createAccount(req: express.Request, res: express.Response) {
-    const payload = await AuthServices.createAccount(req.body)
+    const payload = await UserServices.createAccount(req.body)
     return res.status(HttpStatus.CREATED).json({
       status: HttpStatus.CREATED,
       data: payload,
@@ -45,8 +45,8 @@ export default class AuthControllers {
       await AuthServices.generateTokens(userId)
     await AuthServices.updateRefreshToken(oldRefreshToken, newRefreshToken)
     res.cookie(tokens.REFRESH, newRefreshToken.token, cookiesOptions)
-    return res.status(HttpStatus.CREATED).json({
-      status: HttpStatus.CREATED,
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
       data: {
         token: access,
       },
@@ -66,6 +66,27 @@ export default class AuthControllers {
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: payload,
+    })
+  }
+
+  static async forgetPassword(req: express.Request, res: express.Response) {
+    const payload = await AuthServices.forgetPassword(req.body.email)
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: payload,
+    })
+  }
+
+  static async resetPassword(req: express.Request, res: express.Response) {
+    const { email, password } = req.body
+    await AuthServices.resetPassword(email, password)
+    await AuthServices.clearRefreshTokens(req.body.user.id)
+    AuthServices.invalidateAccessTokens(email)
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: {
+        msg: 'password changed successfulyy',
+      },
     })
   }
 }

@@ -2,9 +2,7 @@ import { AuthTypes } from '@custom-types'
 import { refreshModel } from '@models'
 
 export default class DAORefresh {
-  static async getRefreshToken(
-    token: string
-  ): Promise<refreshModel.Refresh | null> {
+  static async getRefreshToken(token: string): Promise<refreshModel.Refresh | null> {
     return await refreshModel.default.findOne({ token })
   }
 
@@ -15,9 +13,7 @@ export default class DAORefresh {
     return await refreshModel.default.create({ ...token, owner })
   }
 
-  static async deleteToken(
-    token: string
-  ): Promise<refreshModel.Refresh | null> {
+  static async deleteToken(token: string): Promise<refreshModel.Refresh | null> {
     return await refreshModel.default.findOneAndUpdate(
       { token },
       { deletedAt: Date.now(), isDeleted: true }
@@ -29,5 +25,9 @@ export default class DAORefresh {
     newToken: AuthTypes.RefreshToken
   ): Promise<refreshModel.Refresh | null> {
     return await refreshModel.default.findOneAndUpdate({ token: oldToken }, newToken)
+  }
+
+  static async clearTokens(query: any): Promise<void> {
+    await refreshModel.default.updateMany(query, { isDeleted: true })
   }
 }

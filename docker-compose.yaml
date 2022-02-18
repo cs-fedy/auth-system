@@ -22,20 +22,21 @@ services:
     volumes:
       - db_cache:/data
 
-  # app:
-  #   build: .
-  #   container_name: app
-  #   restart: always
-  #   volumes:
-  #     - .:/home/app/:ro
-  #     - /home/app/node_modules/
-  #   ports:
-  #     - 3000:3000
-  #   env_file:
-  #     - ./.env
-  #   depends_on:
-  #     - db
-  #     - cache
+  app:
+    build: .
+    container_name: app
+    restart: always
+    volumes:
+      - .:/home/app/:ro
+      - /home/app/node_modules/
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - cache
+  
 volumes:
   db_data:
   db_cache:

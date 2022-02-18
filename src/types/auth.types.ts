@@ -4,7 +4,7 @@ export interface CreateAccountPayload {
 
 export interface RefreshToken {
   token: string
-  expiresIn: Date
+  expiresIn: number
 }
 
 export interface AuthPayload {
@@ -14,9 +14,13 @@ export interface AuthPayload {
 
 export interface CodePayload {
   code: string
-  expiresIn: Date
+  expiresIn: number
 }
 
 export interface VerifyEmailPayload {
-  expiresIn: Date
+  expiresIn: number
+}
+
+export interface ForgetPasswordPayload {
+  expiresIn: number
 }

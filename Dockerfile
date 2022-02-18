@@ -1,6 +1,5 @@
-FROM node:17-alpine
+FROM node:16-alpine
 WORKDIR /home/app/
-RUN npm i -g yarn
 COPY package.json .
 COPY yarn.lock .
 RUN yarn install

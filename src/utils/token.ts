@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { v4 as uuid } from 'uuid'
 import bcrypt from 'bcrypt'
-import {config} from '@configs'
+import { config } from '@configs'
 import { AuthTypes } from '@custom-types'
 
 export const generateAccessToken = (data: any) =>
@@ -13,7 +13,7 @@ export const generateRefreshToken = async (): Promise<AuthTypes.RefreshToken> =>
   const code = uuid()
   const refreshTokenExpiry = new Date(
     Date.now() + parseInt(config.jwt.refreshExpirationDays) * 86400000
-  )
+  ).getTime()
 
   return {
     token: await bcrypt.hash(code, config.saltRound),
@@ -21,11 +21,11 @@ export const generateRefreshToken = async (): Promise<AuthTypes.RefreshToken> =>
   }
 }
 
-export const generateCode = () => {
+export const generateCode = (): AuthTypes.CodePayload => {
   return {
     code: uuid(),
     expiresIn: new Date(
-      Date.now() + parseInt(config.jwt.verifyEmailExpirationMinutes) * 6000
-    ),
+      Date.now() + parseInt(config.jwt.verifyEmailExpirationMinutes) * 60000
+    ).getTime(),
   }
 }

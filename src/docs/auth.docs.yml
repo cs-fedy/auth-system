@@ -1,0 +1,33 @@
+paths:
+  /auth/create_account:
+    post:
+      summary: Signup a user.
+      description: Create a new account for a user in the platform.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                fullName:
+                  type: string
+      responses:
+        '201':
+          description: The created use ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: string

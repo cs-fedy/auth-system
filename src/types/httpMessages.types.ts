@@ -6,6 +6,7 @@ enum HttpMessages {
   H401 = 'You did not provide valid credentials',
   H404 = 'Requested object could not be found',
   H422 = 'Resource cannot be saved. Maybe a validation error?',
+  H429 = 'You sent too many requests, try again later',
   H500 = 'We are sorry an internal error has occurred, try again later'
 }
 

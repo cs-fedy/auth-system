@@ -5,8 +5,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { CommonRouteConfig } from '@common'
 import { errorHandler } from '@middlewares'
-import { HttpStatus, HttpMessages } from '@custom-types'
-import { ApiError } from '@utils'
+import { errorTypes } from '@custom-types'
 import { Morgan, config } from '@configs'
 import routes from '@routes'
 
@@ -28,7 +27,7 @@ class App {
 
     // send back a 404 error for any unknown api request
     this._app.use((req, res, next) => {
-      next(new ApiError(HttpStatus.NOT_FOUND, HttpMessages.H404))
+      next(new errorTypes.NotFoundError())
     })
 
     // handle error

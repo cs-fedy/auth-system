@@ -10,7 +10,6 @@ const envVarsSchema = Joi.object()
       .valid('production', 'development', 'test')
       .default('development'),
     PORT: Joi.number().default(3000),
-    BASE_URL: Joi.string().default('http://localhost:3000'),
     SALT_ROUND: Joi.number().default(12),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     MONGODB_USER: Joi.string().required().description('Mongo DB username'),
@@ -47,7 +46,7 @@ if (error) {
 export default {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
-  baseUrl: envVars.BASE_URL,
+  baseUrl: `http://localhost:${envVars.PORT}`,
   saltRound: envVars.SALT_ROUND,
   db: {
     mongo: {

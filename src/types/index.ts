@@ -1,5 +1,8 @@
-import * as AuthTypes from './authPayload'
-import HttpMessages from './httpMessages'
-import HttpStatus from './httpStatus'
+import * as AuthTypes from './auth.types'
+import HttpMessages from './httpMessages.types'
+import HttpStatus from './httpStatus.types'
+import * as errorTypes from './error.types'
 
-export { AuthTypes, HttpMessages, HttpStatus }
+type ErrorPayload = { [index: string]: string }
+
+export { AuthTypes, HttpMessages, HttpStatus, errorTypes, ErrorPayload }
