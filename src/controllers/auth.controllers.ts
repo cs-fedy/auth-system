@@ -20,9 +20,7 @@ export default class AuthControllers {
     res.cookie(tokens.REFRESH, refresh.token, cookiesOptions)
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: {
-        token: access,
-      },
+      data: { token: access },
     })
   }
 
@@ -32,24 +30,22 @@ export default class AuthControllers {
     res.clearCookie(tokens.REFRESH)
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: {
-        msg: 'logged out successfully',
-      },
+      data: { msg: 'logged out successfully' },
     })
   }
 
   static async refreshToken(req: express.Request, res: express.Response) {
     const { id: userId } = req.body.user
     const { refreshToken: oldRefreshToken } = req.body.authPayload
-    const { access, refresh: newRefreshToken } =
-      await AuthServices.generateTokens(userId)
+    const { access, refresh: newRefreshToken } = await AuthServices.generateTokens(userId)
     await AuthServices.updateRefreshToken(oldRefreshToken, newRefreshToken)
-    res.cookie(tokens.REFRESH, newRefreshToken.token, cookiesOptions)
+    res.cookie(tokens.REFRESH, newRefreshToken.token, {
+      ...cookiesOptions,
+      expires: newRefreshToken.expiresIn,
+    })
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
-      data: {
-        token: access,
-      },
+      data: { token: access },
     })
   }
 
@@ -79,9 +75,10 @@ export default class AuthControllers {
 
   static async resetPassword(req: express.Request, res: express.Response) {
     const { email, password } = req.body
+    // TODO: fix this call
     await AuthServices.resetPassword(email, password)
     await AuthServices.clearRefreshTokens(req.body.user.id)
-    AuthServices.invalidateAccessTokens(email)
+    await AuthServices.invalidateAccessTokens(email)
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {

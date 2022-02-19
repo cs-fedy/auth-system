@@ -9,7 +9,8 @@ const requiredString = {
 export interface User extends commonModelConfig.IBSchema {
   email: string
   password: string
-  fullName: string
+  firstName: string
+  lastName: string
   verified: boolean
   activated: boolean
 }
@@ -21,7 +22,8 @@ const schema = new mongoose.Schema<User>(
     ...commonModelConfig.baseSchema.obj,
     email: requiredString,
     password: requiredString,
-    fullName: requiredString,
+    firstName: requiredString,
+    lastName: requiredString,
     verified: {
       type: Boolean,
       default: false,

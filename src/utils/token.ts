@@ -5,15 +5,13 @@ import { config } from '@configs'
 import { AuthTypes } from '@custom-types'
 
 export const generateAccessToken = (data: any) =>
-  jwt.sign(data, config.jwt.secret, {
-    expiresIn: `${config.jwt.accessExpirationMinutes}m`,
-  })
+  jwt.sign(data, config.jwt.secret, { expiresIn: `${config.jwt.accessExpirationMinutes}m` })
 
 export const generateRefreshToken = async (): Promise<AuthTypes.RefreshToken> => {
   const code = uuid()
   const refreshTokenExpiry = new Date(
     Date.now() + parseInt(config.jwt.refreshExpirationDays) * 86400000
-  ).getTime()
+  )
 
   return {
     token: await bcrypt.hash(code, config.saltRound),

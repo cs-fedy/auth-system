@@ -25,8 +25,7 @@ export default class AuthRoute extends CommonRouteConfig {
     ])
 
     authRouter.post('/login', [
-      // TODO: fix rate limiter middleware
-      // AuthMiddlewares.rateLimiter,
+      AuthMiddlewares.rateLimiter,
       validate(authValidators.login),
       UserMiddlewares.checkUserExistByEmail,
       AuthMiddlewares.checkPasswordIsValid,
@@ -65,7 +64,6 @@ export default class AuthRoute extends CommonRouteConfig {
       catchAsync(AuthControllers.forgetPassword),
     ])
 
-    // TODO: fix this route
     authRouter.post('/reset_password', [
       validate(authValidators.resetPassword),
       UserMiddlewares.checkUserExistByEmail,

@@ -6,7 +6,8 @@ export default class AuthValidators {
     body: Joi.object().keys({
       email: Joi.string().required().email(),
       password: Joi.string().required().custom(password),
-      fullName: Joi.string().required(),
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
     }).unknown(),
   }
 

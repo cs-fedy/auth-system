@@ -71,7 +71,7 @@ export default class AuthServices {
       throw new errorTypes.InternalServerError()
     }
 
-    return { expiresIn }
+    return { expiresIn: new Date(expiresIn) }
   }
 
   static async confirmEmail(email: string): Promise<{ [userId: string]: string }> {
@@ -97,13 +97,12 @@ export default class AuthServices {
       throw new errorTypes.InternalServerError()
     }
 
-    return { expiresIn }
+    return { expiresIn: new Date(expiresIn) }
   }
 
-  static async resetPassword(email: string, newPassword: string): Promise<string> {
+  static async resetPassword(email: string, newPassword: string): Promise<void> {
     const hashedPassword = await hash.hash(newPassword)
-    const user = await DAOUser.updateUser({ email }, { password: hashedPassword })
-    return user?.id || ''
+    await DAOUser.updateUser({ email }, { password: hashedPassword })
   }
 
   static async clearRefreshTokens(id: string): Promise<void> {

@@ -100,16 +100,18 @@ export default class AuthMiddlewares {
       retrySeconds = Math.round(limitEmailIP.msBeforeNext / 1000) || 1
 
     if (retrySeconds <= 0) next()
-    return res
-      .set('Retry-After', String(retrySeconds))
-      .status(HttpStatus.TOO_MANY_REQUESTS)
-      .json({
-        status: HttpStatus.TOO_MANY_REQUESTS,
-        message: HttpMessages.H429,
-        errors: {
-          msg: `Too many requests. Retry after ${retrySeconds} seconds.`,
-        },
-      })
+    else {
+      res
+        .set('Retry-After', String(retrySeconds))
+        .status(HttpStatus.TOO_MANY_REQUESTS)
+        .json({
+          status: HttpStatus.TOO_MANY_REQUESTS,
+          message: HttpMessages.H429,
+          errors: {
+            msg: `Too many requests. Retry after ${retrySeconds} seconds.`,
+          },
+        })
+    }
   }
 
   static async checkCode(req: express.Request, res: express.Response, next: express.NextFunction) {
