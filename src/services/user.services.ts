@@ -11,13 +11,12 @@ export default class UserServices {
     return await DAOUser.getUserById(userId)
   }
 
-  static async createAccount(
-    user: userModel.User
-  ): Promise<AuthTypes.CreateAccountPayload> {
+  static async createAccount(user: userModel.User): Promise<AuthTypes.CreateAccountPayload> {
     const { id: userId } = await DAOUser.createUser({
       ...user,
       password: await hash.hash(user.password),
     })
+
     return { userId }
   }
 }

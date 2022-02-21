@@ -35,6 +35,7 @@
       "@controllers": ["controllers/index.ts"],
       "@db": ["db/index.ts"],
       "@docs": ["docs/index.ts"],
+      "@jobs": ["jobs/index.ts"],
       "@middlewares": ["middlewares/index.ts"],
       "@models": ["models/index.ts"],
       "@routes": ["routes/index.ts"],

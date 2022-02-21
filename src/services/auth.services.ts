@@ -1,9 +1,9 @@
-import sgMail from '@sendgrid/mail'
 import { DAOUser, refreshModel, DAORefresh } from '@models'
 import { AuthTypes, errorTypes } from '@custom-types'
 import { hash, token } from '@utils'
 import { redis } from '@db'
-import { config, tokens } from '@configs'
+import { tokens } from '@configs'
+import { destroyAccount, sendEmail } from '@root/jobs'
 
 export default class AuthServices {
   static async generateTokens(userId: string): Promise<AuthTypes.AuthPayload> {
@@ -56,16 +56,15 @@ export default class AuthServices {
 
   static async verifyEmail(email: string): Promise<AuthTypes.VerifyEmailPayload> {
     const { code, expiresIn } = token.generateCode()
-    sgMail.setApiKey(config.sendGridApiKey)
     try {
-      const msg = {
+      sendEmail({
         to: email,
         from: 'fedi.abd01@gmail.com',
         subject: 'Confirmation email',
-        text: `this is your confirmation code: ${code}`,
-      }
-      await sgMail.send(msg)
+        text: `this is your confirmation code: ${code} - if you don't verify your account in a day, it will be destroyed automatically`,
+      })
 
+      destroyAccount(email)
       await redis.setex(`${tokens.VERIFY_EMAIL}_${email}`, Math.round(expiresIn / 1000), code)
     } catch (error) {
       throw new errorTypes.InternalServerError()
@@ -81,15 +80,13 @@ export default class AuthServices {
 
   static async forgetPassword(email: string): Promise<AuthTypes.ForgetPasswordPayload> {
     const { code, expiresIn } = token.generateCode()
-    sgMail.setApiKey(config.sendGridApiKey)
     try {
-      const msg = {
+      sendEmail({
         to: email,
         from: 'fedi.abd01@gmail.com',
         subject: 'password reset code',
         text: `this is your password reset code: ${code}`,
-      }
-      await sgMail.send(msg)
+      })
 
       await redis.setex(`${tokens.VERIFY_EMAIL}_${email}`, Math.round(expiresIn / 1000), code)
     } catch (error) {
