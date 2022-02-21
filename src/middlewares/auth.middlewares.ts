@@ -107,9 +107,7 @@ export default class AuthMiddlewares {
         .json({
           status: HttpStatus.TOO_MANY_REQUESTS,
           message: HttpMessages.H429,
-          errors: {
-            msg: `Too many requests. Retry after ${retrySeconds} seconds.`,
-          },
+          errors: { msg: `Too many requests. Retry after ${retrySeconds} seconds.` },
         })
     }
   }

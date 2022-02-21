@@ -89,7 +89,7 @@ export default class AuthServices {
         subject: 'password reset code',
         text: `this is your password reset code: ${code}`,
       }
-      sgMail.send(msg)
+      await sgMail.send(msg)
 
       await redis.setex(`${tokens.VERIFY_EMAIL}_${email}`, Math.round(expiresIn / 1000), code)
     } catch (error) {
