@@ -6,8 +6,8 @@ import { AuthControllers } from '@controllers'
 import { catchAsync } from '@utils'
 
 export default class AuthRoute extends CommonRouteConfig {
-  constructor(apiPath: string) {
-    super(express.Router(), apiPath)
+  constructor(apiPath: string, middlewares: any[] | undefined = undefined) {
+    super(express.Router(), apiPath, middlewares)
     this.router = this.configureRoutes()
   }
 

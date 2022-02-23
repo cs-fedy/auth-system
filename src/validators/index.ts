@@ -1,3 +1,4 @@
 import authValidators from './auth.validators'
+import userValidators from './user.validators'
 
-export { authValidators }
+export { authValidators, userValidators }

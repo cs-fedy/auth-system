@@ -17,6 +17,10 @@ export default class DAOUser {
     return await userModel.default.findOneAndUpdate(query, update)
   }
 
+  static async updateUserById(userId: string, update: any): Promise<userModel.User | null> {
+    return await userModel.default.findByIdAndUpdate(userId, update)
+  }
+
   static async deleteUser(email: string): Promise<string | null> {
     return await userModel.default.findOneAndRemove({ email })
   }
