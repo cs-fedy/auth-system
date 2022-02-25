@@ -4,9 +4,11 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint . --ext .ts",
-    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/index.js",
-    "dev": "nodemon -L --config nodemon.json src/index.ts"
+    "build": "yarn tsc -p .",
+    "start": "yarn build && node -r ./paths.setup.js dist/index.js",
+    "dev": "nodemon -L --config nodemon.json src/index.ts",
+    "seed": "node seed.mongo.js",
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.0",
@@ -23,6 +25,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "mongodb": "^4.4.0",
     "mongoose": "^6.2.0",
     "morgan": "^1.10.0",
     "rate-limiter-flexible": "^2.3.6",

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import { commonModelConfig } from '@common'
+import { Role } from './role.model'
 
 const requiredString = {
   type: String,
@@ -13,6 +14,7 @@ export interface User extends commonModelConfig.IBSchema {
   lastName: string
   verified: boolean
   activated: boolean
+  roles: Role[]
 }
 
 export type PartialUser = Partial<User>
@@ -32,6 +34,7 @@ const schema = new mongoose.Schema<User>(
       type: Boolean,
       default: true,
     },
+    roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'roles' }],
   },
   commonModelConfig.schemaOptions
 )
