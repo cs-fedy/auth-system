@@ -20,6 +20,7 @@ I'm creating an authentication and authorization backend system using `Node.js`,
 3. [TypeScript](https://www.typescriptlang.org/): TypeScript is JavaScript with syntax for types.
 4. [Mongodb](https://www.mongodb.com/): MongoDB is a document database with the scalability and flexibility that you want with the querying and indexing that you need.
 5. [SendGrid](https://sendgrid.com/): Deliver Exceptional Email Experiences.
+6. [Webpack](https://webpack.js.org/): Webpack is an open-source JavaScript module bundler.
 
 ## Author:
 **created at 🌙 with 💻 and ❤ by f0ody**

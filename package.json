@@ -4,8 +4,8 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "yarn tsc -p .",
-    "start": "yarn build && node -r ./paths.setup.js dist/index.js",
+    "build": "yarn webpack",
+    "start": "yarn build && node dist/index.js",
     "dev": "nodemon -L --config nodemon.json src/index.ts",
     "seed": "node seed.mongo.js",
     "lint": "eslint . --ext .ts"
@@ -51,8 +51,13 @@
     "eslint-plugin-prettier": "^4.0.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
+    "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.12.0",
-    "typescript": "^4.5.5"
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
+    "typescript": "^4.5.5",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-node-externals": "^3.0.0"
   }
 }

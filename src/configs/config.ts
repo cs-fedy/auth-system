@@ -2,13 +2,12 @@ import dotenv from 'dotenv'
 import path from 'path'
 import Joi from 'joi'
 
-dotenv.config({ path: path.join(__dirname, '../../.env') })
+const envPath = __dirname.indexOf('config') ? '../../.env' : '../env'
+dotenv.config({ path: path.join(__dirname, envPath) })
 
 const envVarsSchema = Joi.object()
   .keys({
-    NODE_ENV: Joi.string()
-      .valid('production', 'development', 'test')
-      .default('development'),
+    NODE_ENV: Joi.string().valid('production', 'development', 'test').default('development'),
     PORT: Joi.number().default(3000),
     SALT_ROUND: Joi.number().default(12),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
@@ -63,12 +62,10 @@ export default {
     secret: envVars.JWT_SECRET,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
-    resetPasswordExpirationMinutes:
-      envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
+    resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
     verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
   },
   maxWrongAttemptsByIPPerDay: envVars.MAX_WRONG_ATTEMPTS_BY_IP_PER_DAY,
-  maxWrongAttemptsByEmailIPPerHour:
-    envVars.MAX_WRONG_ATTEMPTS_BY_EMAIL_IP_PER_HOUR,
+  maxWrongAttemptsByEmailIPPerHour: envVars.MAX_WRONG_ATTEMPTS_BY_EMAIL_IP_PER_HOUR,
   sendGridApiKey: envVars.SENDGRID_API_KEY,
 }
