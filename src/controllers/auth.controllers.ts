@@ -15,7 +15,7 @@ export default class AuthControllers {
 
   static async login(req: express.Request, res: express.Response) {
     const { id: userId } = req.body.user
-    const { access, refresh } = await AuthServices.generateTokens(userId)
+    const { access, refresh } = await AuthServices.generateTokens(userId, req.body.user.roles)
     await AuthServices.createRefreshToken(refresh, userId)
     res.cookie(tokens.REFRESH, refresh.token, cookiesOptions)
     return res.status(HttpStatus.OK).json({
@@ -37,7 +37,10 @@ export default class AuthControllers {
   static async refreshToken(req: express.Request, res: express.Response) {
     const { id: userId } = req.body.user
     const { refreshToken: oldRefreshToken } = req.body.authPayload
-    const { access, refresh: newRefreshToken } = await AuthServices.generateTokens(userId)
+    const { access, refresh: newRefreshToken } = await AuthServices.generateTokens(
+      userId,
+      req.body.user.roles
+    )
     await AuthServices.updateRefreshToken(oldRefreshToken, newRefreshToken)
     res.cookie(tokens.REFRESH, newRefreshToken.token, {
       ...cookiesOptions,

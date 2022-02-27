@@ -9,7 +9,7 @@ const requiredString = {
 
 export interface Role extends commonModelConfig.IBSchema {
   name: string
-  resources: Resource[]
+  resources: Resource[] | string[]
 }
 
 const schema = new mongoose.Schema<Role>(

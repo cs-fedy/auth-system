@@ -1,4 +1,4 @@
-import { userModel, DAOUser } from '@models'
+import { userModel, DAOUser, DAORole } from '@models'
 import { AuthTypes } from '@custom-types'
 import { hash } from '@utils'
 import { sendEmail } from '@jobs'
@@ -13,9 +13,11 @@ export default class UserServices {
   }
 
   static async createAccount(user: userModel.User): Promise<AuthTypes.CreateAccountPayload> {
+    const role = await DAORole.getRole({ name: 'student' }) // get student role
     const { id: userId } = await DAOUser.createUser({
       ...user,
       password: await hash.hash(user.password),
+      roles: [role?.id || ''],
     })
 
     return { userId }

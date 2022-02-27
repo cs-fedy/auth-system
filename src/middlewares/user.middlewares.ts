@@ -3,6 +3,7 @@ import { errorTypes } from '@custom-types'
 import { UserServices } from '@services'
 import { rateModels } from '@models'
 import { hash } from '@utils'
+import { roleModel } from '@models'
 
 export default class UserMiddlewares {
   static async checkUserDoesNotExist(
@@ -65,5 +66,15 @@ export default class UserMiddlewares {
     if (!isSame) next()
     else
       next(new errorTypes.BadRequestError({ msg: 'cannot be authorized, check your credentials' }))
+  }
+
+  static async checkAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const roles = req.body.authPayload.roles as roleModel.Role[]
+    if (!roles.find((role) => role.name === 'admin'))
+      next(
+        new errorTypes.UnauthorizedRequest({ msg: 'cannot be authorized, you are not an admin' })
+      )
+
+    next()
   }
 }

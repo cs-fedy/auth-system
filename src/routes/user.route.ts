@@ -3,6 +3,7 @@ import { CommonRouteConfig } from '@common'
 import { UserMiddlewares, validate } from '@middlewares'
 import { userValidators } from '@validators'
 import { UserControllers } from '@controllers'
+import { catchAsync } from '@utils'
 
 export default class UserRoute extends CommonRouteConfig {
   constructor(apiPath: string, middlewares: any[] | undefined = undefined) {
@@ -18,43 +19,46 @@ export default class UserRoute extends CommonRouteConfig {
     const authenticatedUserRoute = this.configureMiddlewares(express.Router(), this.middlewares)
     const nonAuthenticatedUserRoute = this.configureMiddlewares(express.Router(), [])
 
+    // TODO: get user route
+    // TODO: get users route
+    
     authenticatedUserRoute.patch('/:userId/firstName', [
       validate(userValidators.updateFirstName),
-      UserControllers.updateFirstName,
+      catchAsync(UserControllers.updateFirstName),
     ])
 
     authenticatedUserRoute.patch('/:userId/LastName', [
       validate(userValidators.updateLastName),
-      UserControllers.updateLastName,
+      catchAsync(UserControllers.updateLastName),
     ])
 
     authenticatedUserRoute.patch('/:userId/password', [
       validate(userValidators.updatePassword),
       UserMiddlewares.checkUserPassword,
-      UserControllers.updatePassword,
+      catchAsync(UserControllers.updatePassword),
     ])
 
     authenticatedUserRoute.patch('/:userId/email', [
       validate(userValidators.updateEmail),
       UserMiddlewares.checkUserPassword,
-      UserControllers.updateEmail,
+      catchAsync(UserControllers.updateEmail),
     ])
 
     authenticatedUserRoute.post('/deactivate', [
       validate(userValidators.deactivateUser),
       UserMiddlewares.checkUserPassword,
-      UserControllers.deactivateUserAccount,
+      catchAsync(UserControllers.deactivateUserAccount),
     ])
 
     authenticatedUserRoute.delete('/:userId', [
       validate(userValidators.deleteAccount),
       UserMiddlewares.checkUserPassword,
-      UserControllers.deleteAccount,
+      catchAsync(UserControllers.deleteAccount),
     ])
 
     nonAuthenticatedUserRoute.post('/activate', [
       validate(userValidators.activateUser),
-      UserControllers.activateUserAccount,
+      catchAsync(UserControllers.activateUserAccount),
     ])
 
     this.router.use(this.apiPath, authenticatedUserRoute)

@@ -27,41 +27,39 @@ export default class AuthMiddlewares {
     next()
   }
 
-  static auth() {
-    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const authHeader = req.headers.authorization || ''
-      if (!authHeader)
-        next(new errorTypes.BadRequestError({ msg: 'Authorization header must be provided' }))
+  static async auth(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const authHeader = req.headers.authorization || ''
+    if (!authHeader)
+      next(new errorTypes.BadRequestError({ msg: 'Authorization header must be provided' }))
 
-      const token = authHeader.split('Bearer ')[1]
-      if (!token)
-        next(new errorTypes.BadRequestError({ msg: 'Authorization token must be: Bearer [token]' }))
+    const token = authHeader.split('Bearer ')[1]
+    if (!token)
+      next(new errorTypes.BadRequestError({ msg: 'Authorization token must be: Bearer [token]' }))
 
-      let payload = { accessToken: token, userId: '', exp: 0 }
-      try {
-        const { userId, exp } = jwt.verify(token, config.jwt.secret) as jwt.JwtPayload
-        payload = { ...payload, userId, exp: exp || 0 }
-      } catch (err) {
-        next(new errorTypes.BadRequestError({ msg: 'Invalid/Expired token' }))
-      }
-
-      //* check if token is black listed or not
-      try {
-        let parsedResult: { [x: string]: number } = {}
-        const result = (await redis.get(`${tokens.ACCESS}_${payload.userId}`)) as string
-        if (res) {
-          parsedResult = JSON.parse(result as string)
-          if (parsedResult && (parsedResult['all_invalidated'] === 1 || parsedResult[token])) {
-            next(new errorTypes.BadRequestError({ msg: 'Token is black listed' }))
-          }
-        }
-      } catch (error) {
-        next(new errorTypes.InternalServerError())
-      }
-
-      Object.assign(req.body, { authPayload: payload })
-      next()
+    let payload = { accessToken: token, userId: '', roles: [], exp: 0 }
+    try {
+      const { userId, roles, exp } = jwt.verify(token, config.jwt.secret) as jwt.JwtPayload
+      payload = { ...payload, userId, roles, exp: exp || 0 }
+    } catch (err) {
+      next(new errorTypes.BadRequestError({ msg: 'Invalid/Expired token' }))
     }
+
+    //* check if token is black listed or not
+    try {
+      let parsedResult: { [x: string]: number } = {}
+      const result = (await redis.get(`${tokens.ACCESS}_${payload.userId}`)) as string
+      if (res) {
+        parsedResult = JSON.parse(result as string)
+        if (parsedResult && (parsedResult['all_invalidated'] === 1 || parsedResult[token])) {
+          next(new errorTypes.BadRequestError({ msg: 'Token is black listed' }))
+        }
+      }
+    } catch (error) {
+      next(new errorTypes.InternalServerError())
+    }
+
+    Object.assign(req.body, { authPayload: payload })
+    next()
   }
 
   static async checkRefreshToken(

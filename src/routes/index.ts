@@ -7,14 +7,15 @@ import AdminRoute from './admin.route'
 const routes: Array<CommonRouteConfig> = [
   new AuthRoute('/auth'),
   new UserRoute('/user', [
-    AuthMiddlewares.auth(),
+    AuthMiddlewares.auth,
     UserMiddlewares.checkUserExist,
     UserMiddlewares.checkAccessAbility,
   ]),
   new AdminRoute('/admin', [
-    AuthMiddlewares.auth(),
+    AuthMiddlewares.auth,
     UserMiddlewares.checkUserExist,
     UserMiddlewares.checkAccessAbility,
+    UserMiddlewares.checkAdmin,
   ]),
 ]
 

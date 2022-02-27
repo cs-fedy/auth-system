@@ -14,7 +14,7 @@ export interface User extends commonModelConfig.IBSchema {
   lastName: string
   verified: boolean
   activated: boolean
-  roles: Role[]
+  roles: Role[] | string[]
 }
 
 export type PartialUser = Partial<User>

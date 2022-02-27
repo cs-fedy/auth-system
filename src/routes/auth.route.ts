@@ -33,7 +33,7 @@ export default class AuthRoute extends CommonRouteConfig {
     ])
 
     authRouter.post('/logout', [
-      AuthMiddlewares.auth(),
+      AuthMiddlewares.auth,
       UserMiddlewares.checkUserExist,
       catchAsync(AuthControllers.logout),
     ])
@@ -45,13 +45,13 @@ export default class AuthRoute extends CommonRouteConfig {
     ])
 
     authRouter.post('/verify_email', [
-      AuthMiddlewares.auth(),
+      AuthMiddlewares.auth,
       UserMiddlewares.checkUserExist,
       catchAsync(AuthControllers.verifyEmail),
     ])
 
     authRouter.post('/confirm_email', [
-      AuthMiddlewares.auth(),
+      AuthMiddlewares.auth,
       validate(authValidators.confirmEmail),
       UserMiddlewares.checkUserExist,
       AuthMiddlewares.checkCode,
