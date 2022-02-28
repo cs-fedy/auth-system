@@ -1,19 +1,14 @@
-import { DAOUser, refreshModel, DAORefresh, DAORole } from '@models'
+import { DAOUser, refreshModel, DAORefresh } from '@models'
 import { AuthTypes, errorTypes } from '@custom-types'
 import { hash, token } from '@utils'
 import { redis } from '@db'
 import { tokens } from '@configs'
-import { destroyAccount, sendEmail } from '@root/jobs'
+import { destroyAccount, sendEmail } from '@jobs'
+import RoleServices from './role.services'
 
 export default class AuthServices {
   static async generateTokens(userId: string, rolesIds: string[]): Promise<AuthTypes.AuthPayload> {
-    const roles: string[] = []
-    for (const roleId of rolesIds) {
-      const role = await DAORole.getRoleById(roleId)
-      roles.push(role?.name || '')
-    }
-
-    const data = { userId, roles }
+    const data = { userId, roles: await RoleServices.getRoles(rolesIds) }
     return {
       access: token.generateAccessToken(data),
       refresh: await token.generateRefreshToken(),

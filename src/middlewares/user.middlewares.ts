@@ -3,7 +3,8 @@ import { errorTypes } from '@custom-types'
 import { UserServices } from '@services'
 import { rateModels } from '@models'
 import { hash } from '@utils'
-import { roleModel } from '@models'
+import { roleModel, resourceModel } from '@models'
+import _ from 'lodash'
 
 export default class UserMiddlewares {
   static async checkUserDoesNotExist(
@@ -70,11 +71,32 @@ export default class UserMiddlewares {
 
   static async checkAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
     const roles = req.body.authPayload.roles as roleModel.Role[]
-    if (!roles.find((role) => role.name === 'admin'))
+    const adminRole = roles.find((role) => role.name === 'admin')
+    if (!adminRole)
       next(
         new errorTypes.UnauthorizedRequest({ msg: 'cannot be authorized, you are not an admin' })
       )
 
+    Object.assign(req.body, { adminRole })
     next()
+  }
+
+  static checkPermissions(resourceName: string, permissions: any) {
+    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const {
+        adminRole: { name, permissions: adminPermissions },
+      } = req.body
+      if (
+        resourceName !== name ||
+        _.isEqual(permissions, _.pick(adminPermissions, permissions.keys()))
+      )
+        next(
+          new errorTypes.UnauthorizedRequest({
+            msg: 'cannot be authorized, you do not have the right to operate on this resource',
+          })
+        )
+
+      next()
+    }
   }
 }

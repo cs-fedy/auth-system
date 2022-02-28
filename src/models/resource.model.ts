@@ -12,7 +12,7 @@ const requiredBoolean = {
   required: true,
 }
 
-interface Permission {
+export interface Permission {
   read: boolean
   write: boolean
   update: boolean

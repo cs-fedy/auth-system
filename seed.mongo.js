@@ -1,13 +1,16 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 // TODO: Fix the problem of the date not matching mongodb timestamps[]
+// TODO: Add drop data from db
+// TODO: Create all the roles
+// TODO: Assign users resource to all roles
 const bcrypt = require('bcrypt')
 const MongoClient = require('mongodb').MongoClient
 
 const baseDoc = { isDeleted: false }
 
 const connectDb = async () => {
-  const uri = 'mongodb://admin:admin@db:27017/'
+  const uri = 'mongodb://admin:admin@localhost:27017/'
   const client = new MongoClient(uri)
   return await client.connect()
 }
@@ -44,6 +47,30 @@ connectDb().then(async (mongo) => {
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
+    {
+      name: 'roles',
+      permissions: {
+        read: true,
+        write: true,
+        update: true,
+        delete: true,
+      },
+      ...baseDoc,
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
+    },
+    {
+      name: 'resources',
+      permissions: {
+        read: true,
+        write: true,
+        update: true,
+        delete: true,
+      },
+      ...baseDoc,
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
+    },
   ]
 
   console.log('🌱 Seeding resources collection 🍀')
@@ -53,7 +80,7 @@ connectDb().then(async (mongo) => {
   const roles = [
     {
       name: 'admin',
-      resources: [insertedIds[0]],
+      resources: [insertedIds[0], insertedIds[2], insertedIds[3]],
       ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),

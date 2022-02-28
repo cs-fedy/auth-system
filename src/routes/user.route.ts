@@ -19,38 +19,41 @@ export default class UserRoute extends CommonRouteConfig {
     const authenticatedUserRoute = this.configureMiddlewares(express.Router(), this.middlewares)
     const nonAuthenticatedUserRoute = this.configureMiddlewares(express.Router(), [])
 
-    // TODO: get user route
-    // TODO: get users route
-    
     authenticatedUserRoute.patch('/:userId/firstName', [
+      UserMiddlewares.checkPermissions('users', { update: true }),
       validate(userValidators.updateFirstName),
       catchAsync(UserControllers.updateFirstName),
     ])
 
     authenticatedUserRoute.patch('/:userId/LastName', [
+      UserMiddlewares.checkPermissions('users', { update: true }),
       validate(userValidators.updateLastName),
       catchAsync(UserControllers.updateLastName),
     ])
 
     authenticatedUserRoute.patch('/:userId/password', [
+      UserMiddlewares.checkPermissions('users', { update: true }),
       validate(userValidators.updatePassword),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.updatePassword),
     ])
 
     authenticatedUserRoute.patch('/:userId/email', [
+      UserMiddlewares.checkPermissions('users', { update: true }),
       validate(userValidators.updateEmail),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.updateEmail),
     ])
 
     authenticatedUserRoute.post('/deactivate', [
+      UserMiddlewares.checkPermissions('users', { update: true }),
       validate(userValidators.deactivateUser),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.deactivateUserAccount),
     ])
 
     authenticatedUserRoute.delete('/:userId', [
+      UserMiddlewares.checkPermissions('users', { delete: true }),
       validate(userValidators.deleteAccount),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.deleteAccount),

@@ -9,9 +9,10 @@ I'm creating an authentication and authorization backend system using `Node.js`,
 1. Clone the repo `git clone https://github.com/cs-fedy/auth-system`
 2. Change your current directory to the repo dir: `cd auth-system`
 3. Run `docker compose up -d` to start the db.
-4. If not working with node as a container then install yarn: `np i -g yarn`
-5. Install all the dependencies:  `yarn install`
-6. Run the system in a dev env: `yarn run dev`
+4. Seed the db: `yarn run seed`
+5. If not working with node as a container then install yarn: `np i -g yarn`
+6. Install all the dependencies:  `yarn install`
+7. Run the system in a dev env: `yarn run dev`
 
 ## used tools:
 

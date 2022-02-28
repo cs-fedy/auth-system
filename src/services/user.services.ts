@@ -13,7 +13,7 @@ export default class UserServices {
   }
 
   static async createAccount(user: userModel.User): Promise<AuthTypes.CreateAccountPayload> {
-    const role = await DAORole.getRole({ name: 'student' }) // get student role
+    const role = await DAORole.getRole({ name: 'student' }) //* get student role
     const { id: userId } = await DAOUser.createUser({
       ...user,
       password: await hash.hash(user.password),

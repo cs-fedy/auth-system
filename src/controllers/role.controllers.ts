@@ -12,22 +12,45 @@ export default class RoleControllers {
     })
   }
 
-  static async createResource(req: express.Request, res: express.Response) {
-    const { name, permissions } = req.body
-    const data = { name, permissions }
-    const { id: roleId } = await RoleServices.createResource(data)
+  static async grantRole(req: express.Request, res: express.Response) {
+    const {
+      userId,
+      roleId,
+      role: { name: roleName },
+    } = req.body
+    await RoleServices.grantRole(userId, roleId, roleName)
     return res.status(HttpStatus.CREATED).json({
       status: HttpStatus.CREATED,
-      data: { roleId },
+      data: { msg: 'role granted successfully', userId, roleId },
     })
   }
 
-  static async assignResource(req: express.Request, res: express.Response) {
-    const { roleId, resourceId } = req.body
-    await RoleServices.assignResource(roleId, resourceId)
-    return res.status(HttpStatus.CREATED).json({
-      status: HttpStatus.CREATED,
-      data: { roleId, resourceId },
+  static async revokeRole(req: express.Request, res: express.Response) {
+    const {
+      userId,
+      roleId,
+      role: { name: roleName },
+    } = req.body
+    await RoleServices.revokeRole(userId, roleId, roleName)
+    return res.status(HttpStatus.NO_CONTENT).json({
+      status: HttpStatus.NO_CONTENT,
+      data: { msg: 'role revoked successfully', userId, roleId },
+    })
+  }
+
+  static async listRoles(req: express.Request, res: express.Response) {
+    const roles = await RoleServices.listRoles()
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: { roles },
+    })
+  }
+
+  static async getRole(req: express.Request, res: express.Response) {
+    const role = await RoleServices.getRole(req.params.roleId)
+    return res.status(HttpStatus.OK).json({
+      status: HttpStatus.OK,
+      data: { role },
     })
   }
 }

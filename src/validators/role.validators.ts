@@ -9,26 +9,27 @@ export default class RoleValidators {
       .unknown(),
   }
 
-  static createResource = {
+  static grantRole = {
     body: Joi.object()
       .keys({
-        name: Joi.string().required(),
-        permissions: Joi.object().keys({
-          read: Joi.boolean().required(),
-          write: Joi.boolean().required(),
-          update: Joi.boolean().required(),
-          delete: Joi.boolean().required(),
-        }),
+        userId: Joi.string().required(),
+        roleId: Joi.string().required(),
       })
       .unknown(),
   }
 
-  static assignResource = {
+  static revokeRole = {
     body: Joi.object()
       .keys({
+        userId: Joi.string().required(),
         roleId: Joi.string().required(),
-        resourceId: Joi.string().required(),
       })
       .unknown(),
+  }
+
+  static getRole = {
+    params: Joi.object().keys({
+      roleId: Joi.string().required(),
+    }),
   }
 }
