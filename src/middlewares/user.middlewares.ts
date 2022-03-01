@@ -26,7 +26,7 @@ export default class UserMiddlewares {
     const user = await UserServices.getUserByEmail(req.body.email)
     if (!user) {
       await rateModels.loginLimiterByIP.consume(req.ip)
-      next(new errorTypes.BadRequestError({ msg: 'cannot be authorized, check your credentials' }))
+      next(new errorTypes.BadRequestError({ msg: 'user already exist, check your credentials' }))
     }
 
     Object.assign(req.body, { user })
@@ -46,17 +46,6 @@ export default class UserMiddlewares {
     next()
   }
 
-  static async checkAccessAbility(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) {
-    const { activated, isDeleted, verified } = req.body.user
-    if (!activated || isDeleted || !verified)
-      next(new errorTypes.UnauthorizedRequest({ msg: 'check your account status' }))
-    else next()
-  }
-
   static async checkUserPassword(
     req: express.Request,
     res: express.Response,
@@ -64,31 +53,35 @@ export default class UserMiddlewares {
   ) {
     const { password: oldPassword, user } = req.body
     const isSame = await hash.compare(oldPassword, user.password)
-    if (!isSame) next()
+    if (isSame) next()
     else
       next(new errorTypes.BadRequestError({ msg: 'cannot be authorized, check your credentials' }))
   }
 
-  static async checkAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const roles = req.body.authPayload.roles as roleModel.Role[]
-    const adminRole = roles.find((role) => role.name === 'admin')
-    if (!adminRole)
-      next(
-        new errorTypes.UnauthorizedRequest({ msg: 'cannot be authorized, you are not an admin' })
-      )
+  static checkRole(roleName: string) {
+    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const roles = req.body.authPayload.roles as roleModel.Role[]
+      const targetRole = roles.find((role) => role.name === roleName)
+      if (!targetRole)
+        next(
+          new errorTypes.UnauthorizedRequest({
+            msg: `cannot be authorized, you are not an ${roleName}`,
+          })
+        )
 
-    Object.assign(req.body, { adminRole })
-    next()
+      Object.assign(req.body, { targetRole })
+      next()
+    }
   }
 
   static checkPermissions(resourceName: string, permissions: any) {
     return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const {
-        adminRole: { name, permissions: adminPermissions },
-      } = req.body
+      const { targetRole } = req.body
+      const resources = targetRole.resources as resourceModel.Resource[]
+      const resource = resources.find((resource) => resource.name === resourceName)
       if (
-        resourceName !== name ||
-        _.isEqual(permissions, _.pick(adminPermissions, permissions.keys()))
+        !resource ||
+        !_.isEqual(permissions, _.pick(resource.permissions, Object.keys(permissions)))
       )
         next(
           new errorTypes.UnauthorizedRequest({

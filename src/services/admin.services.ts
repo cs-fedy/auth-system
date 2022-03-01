@@ -1,6 +1,7 @@
 import { DAOUser, userModel } from '@models'
 import { sendEmail } from '@jobs'
 import { hash } from '@root/utils'
+import { config } from '@configs'
 export default class AdminServices {
   static async createUser(data: any, roleName: string): Promise<userModel.User> {
     const newData = { ...data, password: await hash.hash(data.password) }
@@ -8,7 +9,7 @@ export default class AdminServices {
 
     sendEmail({
       to: user?.email,
-      from: 'fedi.abd01@gmail.com',
+      from: config.emailSender,
       subject: 'user created',
       text: `${user?.firstName} ${user?.lastName} your are now a user of the platform as a ${roleName}`,
     })

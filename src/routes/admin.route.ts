@@ -23,7 +23,7 @@ export default class UserRoute extends CommonRouteConfig {
     adminRoute.post('/createUser', [
       UserMiddlewares.checkPermissions('users', { write: true }),
       validate(adminValidators.createUser),
-      UserMiddlewares.checkUserExistByEmail,
+      UserMiddlewares.checkUserDoesNotExist,
       RoleMiddlewares.checkRoleExist,
       catchAsync(AdminControllers.createUser),
     ])

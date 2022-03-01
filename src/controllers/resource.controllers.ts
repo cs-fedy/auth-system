@@ -6,10 +6,10 @@ export default class ResourceControllers {
   static async createResource(req: express.Request, res: express.Response) {
     const { name, permissions } = req.body
     const data = { name, permissions }
-    const { id: roleId } = await ResourceServices.createResource(data)
+    const { id: resourceId } = await ResourceServices.createResource(data)
     return res.status(HttpStatus.CREATED).json({
       status: HttpStatus.CREATED,
-      data: { roleId },
+      data: { resourceId },
     })
   }
 

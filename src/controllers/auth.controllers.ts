@@ -85,7 +85,7 @@ export default class AuthControllers {
     return res.status(HttpStatus.OK).json({
       status: HttpStatus.OK,
       data: {
-        msg: 'password changed successfulyy',
+        msg: 'password changed successfully',
       },
     })
   }

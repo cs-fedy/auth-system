@@ -32,10 +32,7 @@ export default class RoleControllers {
       role: { name: roleName },
     } = req.body
     await RoleServices.revokeRole(userId, roleId, roleName)
-    return res.status(HttpStatus.NO_CONTENT).json({
-      status: HttpStatus.NO_CONTENT,
-      data: { msg: 'role revoked successfully', userId, roleId },
-    })
+    return res.status(HttpStatus.NO_CONTENT)
   }
 
   static async listRoles(req: express.Request, res: express.Response) {

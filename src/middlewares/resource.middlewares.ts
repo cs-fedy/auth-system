@@ -18,7 +18,7 @@ export default class ResourceMiddlewares {
     res: express.Response,
     next: express.NextFunction
   ) {
-    const resource = await DAOResource.getResource({ name: req.body.name })
+    const resource = await DAOResource.getResourceById(req.body.resourceId)
     if (!resource)
       next(new errorTypes.BadRequestError({ msg: 'bad request, resource does not exist' }))
 

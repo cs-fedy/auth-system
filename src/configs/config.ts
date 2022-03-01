@@ -31,6 +31,7 @@ const envVarsSchema = Joi.object()
     MAX_WRONG_ATTEMPTS_BY_IP_PER_DAY: Joi.number().default(100),
     MAX_WRONG_ATTEMPTS_BY_EMAIL_IP_PER_HOUR: Joi.number().default(10),
     SENDGRID_API_KEY: Joi.string().required().description('send_grid api key'),
+    EMAIL_SENDER: Joi.string().required().description('the address of the emails sender'),
   })
   .unknown()
 
@@ -68,4 +69,5 @@ export default {
   maxWrongAttemptsByIPPerDay: envVars.MAX_WRONG_ATTEMPTS_BY_IP_PER_DAY,
   maxWrongAttemptsByEmailIPPerHour: envVars.MAX_WRONG_ATTEMPTS_BY_EMAIL_IP_PER_HOUR,
   sendGridApiKey: envVars.SENDGRID_API_KEY,
+  emailSender: envVars.EMAIL_SENDER,
 }

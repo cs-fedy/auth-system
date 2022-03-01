@@ -68,8 +68,7 @@ export default class AuthMiddlewares {
     next: express.NextFunction
   ) {
     const token = await AuthServices.getRefreshToken(req.cookies[tokens.REFRESH])
-    if (token?.isDeleted)
-      next(new errorTypes.BadRequestError({ msg: 'invalid or expired refresh token' }))
+    if (!token) next(new errorTypes.BadRequestError({ msg: 'invalid or expired refresh token' }))
 
     const expiresIn = token?.expiresIn as Date
     if (expiresIn < new Date(Date.now()))

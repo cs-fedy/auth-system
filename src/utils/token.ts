@@ -19,11 +19,11 @@ export const generateRefreshToken = async (): Promise<AuthTypes.RefreshToken> =>
   }
 }
 
-export const generateCode = (): AuthTypes.CodePayload => {
+export const generateCode = (expireIn: number): AuthTypes.CodePayload => {
   return {
     code: uuid(),
     expiresIn: new Date(
-      Date.now() + parseInt(config.jwt.verifyEmailExpirationMinutes) * 60000
+      Date.now() + expireIn * 60000
     ).getTime(),
   }
 }

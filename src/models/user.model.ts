@@ -13,7 +13,6 @@ export interface User extends commonModelConfig.IBSchema {
   firstName: string
   lastName: string
   verified: boolean
-  activated: boolean
   roles: Role[] | string[]
 }
 
@@ -29,10 +28,6 @@ const schema = new mongoose.Schema<User>(
     verified: {
       type: Boolean,
       default: false,
-    },
-    activated: {
-      type: Boolean,
-      default: true,
     },
     roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'roles' }],
   },

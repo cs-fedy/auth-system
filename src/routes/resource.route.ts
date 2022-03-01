@@ -44,6 +44,9 @@ export default class ResourceRoute extends CommonRouteConfig {
       catchAsync(ResourceControllers.assignResource),
     ])
 
+    // TODO: add revoke resource route
+    // TODO: add remove resource
+
     return this.router.use(this.apiPath, resourceRoute)
   }
 }

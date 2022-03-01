@@ -4,8 +4,6 @@
 const bcrypt = require('bcrypt')
 const MongoClient = require('mongodb').MongoClient
 
-const baseDoc = { isDeleted: false }
-
 const connectDb = async () => {
   const uri = 'mongodb://admin:admin@localhost:27017/'
   const client = new MongoClient(uri)
@@ -28,7 +26,6 @@ connectDb().then(async (mongo) => {
         update: true,
         delete: true,
       },
-      ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
@@ -40,7 +37,6 @@ connectDb().then(async (mongo) => {
         update: true,
         delete: true,
       },
-      ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
@@ -52,7 +48,6 @@ connectDb().then(async (mongo) => {
         update: true,
         delete: true,
       },
-      ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
@@ -64,7 +59,6 @@ connectDb().then(async (mongo) => {
         update: true,
         delete: true,
       },
-      ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
@@ -77,29 +71,31 @@ connectDb().then(async (mongo) => {
   const roles = [
     {
       name: 'admin',
-      resources: [insertedIds[0], insertedIds[1], insertedIds[2], insertedIds[3]],
-      ...baseDoc,
+      resources: [insertedIds[0], insertedIds[1], insertedIds[2]],
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
     {
       name: 'student',
-      resources: [insertedIds[3]],
-      ...baseDoc,
+      resources: [],
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
     {
       name: 'instructor',
-      resources: [insertedIds[3]],
-      ...baseDoc,
+      resources: [],
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
     {
       name: 'content_creator',
+      resources: [],
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
+    },
+    {
+      name: 'all',
       resources: [insertedIds[3]],
-      ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
@@ -113,8 +109,7 @@ connectDb().then(async (mongo) => {
     password: await bcrypt.hash('platform_password2022', 12),
     firstName: 'admin',
     lastName: 'platform',
-    roles: [insertedRolesIds[0]],
-    ...baseDoc,
+    roles: [insertedRolesIds[0], insertedRolesIds[4]],
     createdAt: new Date().toJSON(),
     updatedAt: new Date().toJSON(),
   }

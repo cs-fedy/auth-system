@@ -2,7 +2,7 @@ import { DAOUser, refreshModel, DAORefresh } from '@models'
 import { AuthTypes, errorTypes } from '@custom-types'
 import { hash, token } from '@utils'
 import { redis } from '@db'
-import { tokens } from '@configs'
+import { tokens, config } from '@configs'
 import { destroyAccount, sendEmail } from '@jobs'
 import RoleServices from './role.services'
 
@@ -57,11 +57,11 @@ export default class AuthServices {
   }
 
   static async verifyEmail(email: string): Promise<AuthTypes.VerifyEmailPayload> {
-    const { code, expiresIn } = token.generateCode()
+    const { code, expiresIn } = token.generateCode(config.jwt.verifyEmailExpirationMinutes)
     try {
       sendEmail({
         to: email,
-        from: 'fedi.abd01@gmail.com',
+        from: config.emailSender,
         subject: 'Confirmation email',
         text: `this is your confirmation code: ${code} - if you don't verify your account in a day, it will be destroyed automatically`,
       })
@@ -81,11 +81,11 @@ export default class AuthServices {
   }
 
   static async forgetPassword(email: string): Promise<AuthTypes.ForgetPasswordPayload> {
-    const { code, expiresIn } = token.generateCode()
+    const { code, expiresIn } = token.generateCode(config.jwt.resetPasswordExpirationMinutes)
     try {
       sendEmail({
         to: email,
-        from: 'fedi.abd01@gmail.com',
+        from: config.emailSender,
         subject: 'password reset code',
         text: `this is your password reset code: ${code}`,
       })

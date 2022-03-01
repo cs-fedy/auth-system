@@ -14,10 +14,7 @@ export default class DAORefresh {
   }
 
   static async deleteToken(token: string): Promise<refreshModel.Refresh | null> {
-    return await refreshModel.default.findOneAndUpdate(
-      { token },
-      { deletedAt: Date.now(), isDeleted: true }
-    )
+    return await refreshModel.default.findOneAndDelete({ token })
   }
 
   static async updateRefreshToken(
@@ -28,6 +25,6 @@ export default class DAORefresh {
   }
 
   static async clearTokens(query: any): Promise<void> {
-    await refreshModel.default.updateMany(query, { isDeleted: true })
+    await refreshModel.default.deleteMany(query)
   }
 }

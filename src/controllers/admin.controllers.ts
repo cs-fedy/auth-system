@@ -12,10 +12,10 @@ export default class AdminControllers {
       lastName,
       role: { name: roleName },
     } = req.body
-    const data = { email, password, roleId, firstName, lastName }
+    const data = { email, password, roles: [roleId], firstName, lastName }
     const user = await AdminServices.createUser(data, roleName)
-    return res.status(HttpStatus.NO_CONTENT).json({
-      status: HttpStatus.NO_CONTENT,
+    return res.status(HttpStatus.CREATED).json({
+      status: HttpStatus.CREATED,
       data: { msg: 'user created successfully', userId: user.id, roleId },
     })
   }

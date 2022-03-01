@@ -1,6 +1,7 @@
 import { roleModel, DAORole, userModel, DAOUser, resourceModel } from '@models'
 import { sendEmail } from '@jobs'
 import { ResourceServices } from '@services'
+import { config } from '@configs'
 
 export default class RoleServices {
   static async createRole(name: string): Promise<roleModel.Role> {
@@ -17,7 +18,7 @@ export default class RoleServices {
 
     sendEmail({
       to: user?.email,
-      from: 'fedi.abd01@gmail.com',
+      from: config.emailSender,
       subject: 'role granted',
       text: `${user?.firstName} ${user?.lastName} your are granted the ${roleName} role`,
     })
@@ -34,7 +35,7 @@ export default class RoleServices {
 
     sendEmail({
       to: user?.email,
-      from: 'fedi.abd01@gmail.com',
+      from: config.emailSender,
       subject: 'role revoked',
       text: `${user?.firstName} ${user?.lastName} your are no longer an ${roleName}`,
     })
@@ -52,13 +53,13 @@ export default class RoleServices {
 
   static async listRoles(): Promise<roleModel.Role[]> {
     const roles: roleModel.Role[] = []
-    for (let role of await DAORole.getRoles()) {
+    for (const role of await DAORole.getRoles()) {
       const resources: resourceModel.Resource[] = []
       for (const resourceId of role.resources) {
         const resource = await ResourceServices.getResource(resourceId as string)
         resources.push(resource as resourceModel.Resource)
       }
-      role = { ...role, resources }
+      role.resources = resources
       roles.push(role)
     }
 
@@ -73,6 +74,7 @@ export default class RoleServices {
       resources.push(resource as resourceModel.Resource)
     }
 
-    return { ...role, resources }
+    role.resources = resources
+    return role
   }
 }
