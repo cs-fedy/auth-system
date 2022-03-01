@@ -1,9 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 // TODO: Fix the problem of the date not matching mongodb timestamps[]
-// TODO: Add drop data from db
-// TODO: Create all the roles
-// TODO: Assign users resource to all roles
 const bcrypt = require('bcrypt')
 const MongoClient = require('mongodb').MongoClient
 
@@ -36,18 +33,6 @@ connectDb().then(async (mongo) => {
       updatedAt: new Date().toJSON(),
     },
     {
-      name: 'courses',
-      permissions: {
-        read: true,
-        write: false,
-        update: false,
-        delete: false,
-      },
-      ...baseDoc,
-      createdAt: new Date().toJSON(),
-      updatedAt: new Date().toJSON(),
-    },
-    {
       name: 'roles',
       permissions: {
         read: true,
@@ -71,6 +56,18 @@ connectDb().then(async (mongo) => {
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
+    {
+      name: 'self',
+      permissions: {
+        read: true,
+        write: true,
+        update: true,
+        delete: true,
+      },
+      ...baseDoc,
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
+    },
   ]
 
   console.log('🌱 Seeding resources collection 🍀')
@@ -80,14 +77,28 @@ connectDb().then(async (mongo) => {
   const roles = [
     {
       name: 'admin',
-      resources: [insertedIds[0], insertedIds[2], insertedIds[3]],
+      resources: [insertedIds[0], insertedIds[1], insertedIds[2], insertedIds[3]],
       ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
     },
     {
       name: 'student',
-      resources: [insertedIds[1]],
+      resources: [insertedIds[3]],
+      ...baseDoc,
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
+    },
+    {
+      name: 'instructor',
+      resources: [insertedIds[3]],
+      ...baseDoc,
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
+    },
+    {
+      name: 'content_creator',
+      resources: [insertedIds[3]],
       ...baseDoc,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),

@@ -20,40 +20,40 @@ export default class UserRoute extends CommonRouteConfig {
     const nonAuthenticatedUserRoute = this.configureMiddlewares(express.Router(), [])
 
     authenticatedUserRoute.patch('/:userId/firstName', [
-      UserMiddlewares.checkPermissions('users', { update: true }),
+      UserMiddlewares.checkPermissions('self', { update: true }),
       validate(userValidators.updateFirstName),
       catchAsync(UserControllers.updateFirstName),
     ])
 
     authenticatedUserRoute.patch('/:userId/LastName', [
-      UserMiddlewares.checkPermissions('users', { update: true }),
+      UserMiddlewares.checkPermissions('self', { update: true }),
       validate(userValidators.updateLastName),
       catchAsync(UserControllers.updateLastName),
     ])
 
     authenticatedUserRoute.patch('/:userId/password', [
-      UserMiddlewares.checkPermissions('users', { update: true }),
+      UserMiddlewares.checkPermissions('self', { update: true }),
       validate(userValidators.updatePassword),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.updatePassword),
     ])
 
     authenticatedUserRoute.patch('/:userId/email', [
-      UserMiddlewares.checkPermissions('users', { update: true }),
+      UserMiddlewares.checkPermissions('self', { update: true }),
       validate(userValidators.updateEmail),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.updateEmail),
     ])
 
     authenticatedUserRoute.post('/deactivate', [
-      UserMiddlewares.checkPermissions('users', { update: true }),
+      UserMiddlewares.checkPermissions('self', { update: true }),
       validate(userValidators.deactivateUser),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.deactivateUserAccount),
     ])
 
     authenticatedUserRoute.delete('/:userId', [
-      UserMiddlewares.checkPermissions('users', { delete: true }),
+      UserMiddlewares.checkPermissions('self', { delete: true }),
       validate(userValidators.deleteAccount),
       UserMiddlewares.checkUserPassword,
       catchAsync(UserControllers.deleteAccount),
