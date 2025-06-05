@@ -4,9 +4,7 @@ import { UserServices } from '@services'
 import { AuthServices } from '@services'
 
 export default class UserControllers {
-  // TODO: TO FIX: data are being updated but the returned result is the old one
-  //? I think it's something related to the ORM, first I thought the bug is caused by PATCH HTTP methods
-  //? But event using POST the bug continue to appear. Note: all routes use ORM update
+  // Update handlers rely on ORM update methods. Ensure the new document is returned
   //!--------------
   static async updateFirstName(req: express.Request, res: express.Response) {
     const payload = await UserServices.updateFirstName(req.body.user.id, req.body.firstName)

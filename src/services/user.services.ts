@@ -31,7 +31,7 @@ export default class UserServices {
   }
 
   static async updateLastName(userId: string, newLastName: string): Promise<userModel.User> {
-    const user = await DAOUser.updateUserById(userId, { firstName: newLastName })
+    const user = await DAOUser.updateUserById(userId, { lastName: newLastName })
     return user as userModel.User
   }
 
