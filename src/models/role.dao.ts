@@ -18,6 +18,6 @@ export default class DAORole {
   }
 
   static async updateRoleById(roleId: string, data: any): Promise<roleModel.Role | null> {
-    return await roleModel.default.findByIdAndUpdate(roleId, data)
+    return await roleModel.default.findByIdAndUpdate(roleId, data, { new: true })
   }
 }

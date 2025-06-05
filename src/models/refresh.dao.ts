@@ -21,7 +21,7 @@ export default class DAORefresh {
     oldToken: string,
     newToken: AuthTypes.RefreshToken
   ): Promise<refreshModel.Refresh | null> {
-    return await refreshModel.default.findOneAndUpdate({ token: oldToken }, newToken)
+    return await refreshModel.default.findOneAndUpdate({ token: oldToken }, newToken, { new: true })
   }
 
   static async clearTokens(query: any): Promise<void> {
