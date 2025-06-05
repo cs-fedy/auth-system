@@ -1,0 +1,21 @@
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+  moduleNameMapper: {
+    '^@root/(.*)$': '<rootDir>/src/$1',
+    '^@common$': '<rootDir>/src/common/index.ts',
+    '^@configs$': '<rootDir>/src/configs',
+    '^@controllers$': '<rootDir>/src/controllers/index.ts',
+    '^@db$': '<rootDir>/src/db/index.ts',
+    '^@docs$': '<rootDir>/src/docs/index.ts',
+    '^@jobs$': '<rootDir>/src/jobs/index.ts',
+    '^@middlewares$': '<rootDir>/src/middlewares/index.ts',
+    '^@models$': '<rootDir>/src/models/index.ts',
+    '^@routes$': '<rootDir>/src/routes/index.ts',
+    '^@services$': '<rootDir>/src/services/index.ts',
+    '^@custom-types$': '<rootDir>/src/types/index.ts',
+    '^@utils$': '<rootDir>/src/utils/index.ts',
+    '^@validators$': '<rootDir>/src/validators/index.ts',
+  },
+}
