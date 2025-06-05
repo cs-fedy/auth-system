@@ -9,7 +9,8 @@
     "dev": "nodemon -L --config nodemon.json src/index.ts",
     "db:seed": "node seed.mongo.js",
     "db:drop": "node drop.mongo.js",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "test": "ts-node --transpile-only -r tsconfig-paths/register tests/user.services.test.ts"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.0",
